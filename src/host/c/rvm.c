@@ -652,7 +652,7 @@ void run() {
   } while (0)
   while (1) {
     num instr = NUM(CAR(pc));
-    printf("%d\n", instr);
+    printf("instruction: %d\n", instr);
     switch (instr) {
     default: { // error
       vm_exit(EXIT_ILLEGAL_INSTR);
@@ -888,6 +888,7 @@ void decode() {
       }
     }
 
+    printf("decode: %d %ld %ld\n", op, n, x);
     rib *c = alloc_rib(TAG_NUM(op), n, 0);
     c->fields[2] = TOS;
     TOS = TAG_RIB(c);
