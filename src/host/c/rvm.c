@@ -888,7 +888,7 @@ void decode() {
       }
     }
 
-    printf("decode: %d %ld %ld\n", op, n, x);
+    printf("decode: %d %ld\n", op, x);
     rib *c = alloc_rib(TAG_NUM(op), n, 0);
     c->fields[2] = TOS;
     TOS = TAG_RIB(c);
