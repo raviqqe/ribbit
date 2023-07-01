@@ -3,14 +3,12 @@
  */
 
 // @@(feature debug
-//#define DEBUG_I_CALL
+#define DEBUG_I_CALL
 // )@@
 
 #ifdef DEBUG_I_CALL
 #define DEBUG
 #endif
-
-
 
 #ifdef DEBUG
 
@@ -72,7 +70,9 @@ char *input =
 #else
 
 // @@(replace ");'u?>vD?>vRD?>vRA?>vRA?>vR:?>vR=!(:lkm!':lkv6y" (encode 92)
-char *input = ");'u?>vD?>vRD?>vRA?>vRA?>vR:?>vR=!(:lkm!':lkv6y"; // RVM code that prints HELLO!
+char *input =
+    ");'u?>vD?>vRD?>vRA?>vRA?>vR:?>vR=!(:lkm!':lkv6y"; // RVM code that prints
+                                                       // HELLO!
 // )@@
 
 #endif
@@ -405,28 +405,28 @@ void show_operand(obj o) {
 #endif
 
 // @@(feature scm2str
-char* scm2str(obj s) {
-    int length = (int) NUM(CDR(s)); 
-    rib* current = RIB(CAR(s));
-    char* str = malloc(length + 1);
-    for (int i = 0; i < length; i++) {
-        str[i] = (char) NUM(CAR(current));
-        current = RIB(CDR(current));
-    }
+char *scm2str(obj s) {
+  int length = (int)NUM(CDR(s));
+  rib *current = RIB(CAR(s));
+  char *str = malloc(length + 1);
+  for (int i = 0; i < length; i++) {
+    str[i] = (char)NUM(CAR(current));
+    current = RIB(CDR(current));
+  }
 
-    str[length] = '\0';
+  str[length] = '\0';
 
-    return str;
+  return str;
 };
 // )@@
 
-// @@(feature bool2scm 
+// @@(feature bool2scm
 obj bool2scm(bool x) { return x ? CAR(FALSE) : FALSE; }
 // )@@
 
 void prim(int no) {
-  switch (no) { 
-  // @@(primitives (gen "case " index ":" body) 
+  switch (no) {
+  // @@(primitives (gen "case " index ":" body)
   case 0: // @@(primitive (rib a b c)
   {
     obj new_rib = TAG_RIB(alloc_rib(NUM_0, NUM_0, NUM_0));
@@ -436,112 +436,112 @@ void prim(int no) {
     TAG(new_rib) = z;
     push2(new_rib, PAIR_TAG);
     break;
-    
-  } // )@@
+
+  }       // )@@
   case 1: // @@(primitive (id x)
   {
     PRIM1();
     push2(x, PAIR_TAG);
     break;
-  } // )@@
+  }       // )@@
   case 2: // @@(primitive (arg1 x y)
   {
     pop();
     break;
-  } // )@@
+  }       // )@@
   case 3: // @@(primitive (arg2 x y)
   {
     obj x = pop();
     pop();
     push2(x, PAIR_TAG);
     break;
-  } //)@@
+  }       //)@@
   case 4: // @@(primitive (close rib)
   {
     obj x = CAR(TOS);
     obj y = CDR(stack);
     TOS = TAG_RIB(alloc_rib(x, y, CLOSURE_TAG));
     break;
-  } //)@@
+  }       //)@@
   case 5: // @@(primitive (rib? rib) (use bool2scm)
   {
     PRIM1();
     push2(bool2scm(IS_RIB(x)), PAIR_TAG);
     break;
-  } //)@@
+  }       //)@@
   case 6: // @@(primitive (field0 rib)
   {
     PRIM1();
     push2(CAR(x), PAIR_TAG);
     break;
-  } //)@@
+  }       //)@@
   case 7: // @@(primitive (field1 rib)
   {
     PRIM1();
     push2(CDR(x), PAIR_TAG);
     break;
-  } //)@@
-  case 8:  // @@(primitive (field2 rib)
+  }       //)@@
+  case 8: // @@(primitive (field2 rib)
   {
     PRIM1();
     push2(TAG(x), PAIR_TAG);
     break;
-  } //)@@
+  }       //)@@
   case 9: // @@(primitive (field0-set! rib x)
-  { 
+  {
     PRIM2();
     push2(CAR(x) = y, PAIR_TAG);
     break;
-  } //)@@
-  case 10:  // @@(primitive (field1-set! rib x)
+  }        //)@@
+  case 10: // @@(primitive (field1-set! rib x)
   {
     PRIM2();
     push2(CDR(x) = y, PAIR_TAG);
     break;
-  } //)@@
-  case 11:  // @@(primitive (field2-set! rib x)
+  }        //)@@
+  case 11: // @@(primitive (field2-set! rib x)
   {
     PRIM2();
     push2(TAG(x) = y, PAIR_TAG);
     break;
-  } // )@@
-  case 12:  // @@(primitive (eqv? rib1 rib2) (use bool2scm)
+  }        // )@@
+  case 12: // @@(primitive (eqv? rib1 rib2) (use bool2scm)
   {
     PRIM2();
     push2(bool2scm(x == y), PAIR_TAG);
     break;
-  } //)@@
-  case 13:  // @@(primitive (< x y) (use bool2scm)
+  }        //)@@
+  case 13: // @@(primitive (< x y) (use bool2scm)
   {
     PRIM2();
     push2(bool2scm(NUM(x) < NUM(y)), PAIR_TAG);
     break;
-  } //)@@
-  case 14:  // @@(primitive (+ x y)
+  }        //)@@
+  case 14: // @@(primitive (+ x y)
   {
     PRIM2();
     push2(x + y - 1, PAIR_TAG);
     break;
-  } //)@@
-  case 15:  // @@(primitive (- x y)
+  }        //)@@
+  case 15: // @@(primitive (- x y)
   {
     PRIM2();
     push2(x - y + 1, PAIR_TAG);
     break;
-  } //)@@
-  case 16:  // @@(primitive (* x y)
+  }        //)@@
+  case 16: // @@(primitive (* x y)
   {
     PRIM2();
     push2(TAG_NUM((NUM(x) * NUM(y))), PAIR_TAG);
     break;
-  } // )@@
-  case 17:  // @@(primitive (quotient x y)
+  }        // )@@
+  case 17: // @@(primitive (quotient x y)
   {
     PRIM2();
     push2(TAG_NUM((NUM(x) / NUM(y))), PAIR_TAG);
     break;
-  } // )@@
-  case 18:  // @@(primitive (getchar)
+  }        // )@@
+  case 18: // @@(primitive (getchar)
   {
     int read;
 #ifdef NO_STD
@@ -558,12 +558,13 @@ void prim(int no) {
     read &= 0xFF;
 #else
     read = getchar();
-    if (EOF == read) read = -1;
+    if (EOF == read)
+      read = -1;
 #endif
     push2(TAG_NUM(read), PAIR_TAG);
     break;
-  } // )@@
-  case 19:  // @@(primitive (putchar c)
+  }        // )@@
+  case 19: // @@(primitive (putchar c)
   {
     PRIM1();
 #ifdef NO_STD
@@ -586,8 +587,8 @@ void prim(int no) {
 #endif
     push2(x, PAIR_TAG);
     break;
-  } // )@@
-  case 20:  // @@(primitive (exit n)
+  }        // )@@
+  case 20: // @@(primitive (exit n)
   {
     PRIM1();
     vm_exit(NUM(x));
@@ -601,49 +602,45 @@ void prim(int no) {
 }
 
 #ifdef DEBUG
-void show_rib(obj s, int depth){
-    if (depth > 3){
-        if (IS_RIB(s)){
-            printf("[Array]");
-            return;
-        }
+void show_rib(obj s, int depth) {
+  if (depth > 3) {
+    if (IS_RIB(s)) {
+      printf("[Array]");
+      return;
     }
-    if (IS_RIB(s)){
-        printf("[ ");
-        show_rib(CAR(s), depth+1);
-        printf(", ");
-        show_rib(CDR(s), depth+1);
-        printf(", ");
-        show_rib(TAG(s), depth+1);
-        printf(" ]");
-    }
-    else{
-        printf("%d", NUM(s));
-    }
+  }
+  if (IS_RIB(s)) {
+    printf("[ ");
+    show_rib(CAR(s), depth + 1);
+    printf(", ");
+    show_rib(CDR(s), depth + 1);
+    printf(", ");
+    show_rib(TAG(s), depth + 1);
+    printf(" ]");
+  } else {
+    printf("%d", NUM(s));
+  }
 }
 
-void show_stack(){
-    obj itr = stack;
-    PRINTLN();
-    if (NUM(TAG(itr))){
-        printf("[]");
-        return;
-
+void show_stack() {
+  obj itr = stack;
+  PRINTLN();
+  if (NUM(TAG(itr))) {
+    printf("[]");
+    return;
+  }
+  printf("[ ");
+  int first = 0;
+  while (!NUM(TAG(itr))) {
+    if (first) {
+      printf(", ");
+    } else {
+      first = 1;
     }
-    printf("[ ");
-    int first = 0;
-    while(!NUM(TAG(itr))){
-        if (first){
-            printf(", ");
-        }
-        else{
-            first = 1;
-        }
-        show_rib(CAR(itr), 0);
-        itr = CDR(itr);
-    }
-    printf(" ]");
-
+    show_rib(CAR(itr), 0);
+    itr = CDR(itr);
+  }
+  printf(" ]");
 }
 
 #endif
@@ -690,22 +687,23 @@ void run() {
         obj s2 = TAG_RIB(alloc_rib(NUM_0, proc, PAIR_TAG));
         CAR(pc) = CAR(proc);
 
-
         // @@(feature arity-check
-        num vari = NUM(CAR(code))&1;  
-        if ((!vari && nparams != nargs)||(vari && nparams > nargs)){
-            printf("*** Unexpected number of arguments nargs: %ld nparams: %ld vari: %ld\n", nargs, nparams, vari);
-            exit(1);
+        num vari = NUM(CAR(code)) & 1;
+        if ((!vari && nparams != nargs) || (vari && nparams > nargs)) {
+          printf("*** Unexpected number of arguments nargs: %ld nparams: %ld "
+                 "vari: %ld\n",
+                 nargs, nparams, vari);
+          exit(1);
         }
         // )@@
         // @@(feature rest-param (use arity-check)
-        nargs-=nparams;
-        if (vari){
-            obj rest = NIL;
-            for(int i = 0; i < nargs; ++i){
-                rest = TAG_RIB(alloc_rib(pop(), rest, PAIR_TAG));
-            }
-            s2 = TAG_RIB(alloc_rib(rest, s2, PAIR_TAG));
+        nargs -= nparams;
+        if (vari) {
+          obj rest = NIL;
+          for (int i = 0; i < nargs; ++i) {
+            rest = TAG_RIB(alloc_rib(pop(), rest, PAIR_TAG));
+          }
+          s2 = TAG_RIB(alloc_rib(rest, s2, PAIR_TAG));
         }
         // )@@
 
