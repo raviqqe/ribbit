@@ -425,6 +425,7 @@ obj bool2scm(bool x) { return x ? CAR(FALSE) : FALSE; }
 // )@@
 
 void prim(int no) {
+  printf("primitive: %d\n", no);
   switch (no) {
   // @@(primitives (gen "case " index ":" body)
   case 0: // @@(primitive (rib a b c)
